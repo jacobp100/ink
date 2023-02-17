@@ -44,7 +44,6 @@ $ npm install --save-dev react-devtools-core
 }
 
 const cleanupYogaNode = (node?: YogaNode): void => {
-	// @ts-expect-error Types wrong here
 	node?.unsetMeasureFunc();
 	node?.freeRecursive();
 };
