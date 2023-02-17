@@ -1,6 +1,6 @@
-import Yoga from 'yoga-layout-prebuilt';
+import Yoga, {Node as YogaNode} from './yoga';
 
-export default (yogaNode: Yoga.YogaNode) => {
+export default (yogaNode: YogaNode) => {
 	return (
 		yogaNode.getComputedWidth() -
 		yogaNode.getComputedPadding(Yoga.EDGE_LEFT) -

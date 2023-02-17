@@ -1,12 +1,12 @@
-import Yoga from 'yoga-layout-prebuilt';
-import widestLine from 'widest-line';
 import indentString from 'indent-string';
-import wrapText from './wrap-text';
-import getMaxWidth from './get-max-width';
-import squashTextNodes from './squash-text-nodes';
-import renderBorder from './render-border';
+import widestLine from 'widest-line';
 import {DOMElement} from './dom';
+import getMaxWidth from './get-max-width';
 import Output from './output';
+import renderBorder from './render-border';
+import squashTextNodes from './squash-text-nodes';
+import wrapText from './wrap-text';
+import Yoga from './yoga';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.
@@ -20,6 +20,7 @@ const applyPaddingToText = (node: DOMElement, text: string): string => {
 	if (yogaNode) {
 		const offsetX = yogaNode.getComputedLeft();
 		const offsetY = yogaNode.getComputedTop();
+		console.log({offsetX, offsetY});
 		text = '\n'.repeat(offsetY) + indentString(text, offsetX);
 	}
 

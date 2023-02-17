@@ -1,25 +1,25 @@
-import {
-	unstable_scheduleCallback as schedulePassiveEffects,
-	unstable_cancelCallback as cancelPassiveEffects
-} from 'scheduler';
 import createReconciler from 'react-reconciler';
-import Yoga from 'yoga-layout-prebuilt';
 import {
-	createTextNode,
+	unstable_cancelCallback as cancelPassiveEffects,
+	unstable_scheduleCallback as schedulePassiveEffects
+} from 'scheduler';
+import {
 	appendChildNode,
+	createNode,
+	createTextNode,
+	DOMElement,
+	DOMNodeAttribute,
+	ElementNames,
 	insertBeforeNode,
 	removeChildNode,
+	setAttribute,
 	setStyle,
 	setTextNodeValue,
-	createNode,
-	setAttribute,
-	DOMNodeAttribute,
-	TextNode,
-	ElementNames,
-	DOMElement
+	TextNode
 } from './dom';
-import {Styles} from './styles';
 import {OutputTransformer} from './render-node-to-output';
+import {Styles} from './styles';
+import Yoga, {Node as YogaNode} from './yoga';
 
 // We need to conditionally perform devtools connection to avoid
 // accidentally breaking other third-party code.
@@ -28,7 +28,7 @@ if (process.env.DEV === 'true') {
 	try {
 		// eslint-disable-next-line import/no-unassigned-import
 		require('./devtools');
-	} catch (error) {
+	} catch (error: any) {
 		if (error.code === 'MODULE_NOT_FOUND') {
 			console.warn(
 				`
@@ -43,7 +43,8 @@ $ npm install --save-dev react-devtools-core
 	}
 }
 
-const cleanupYogaNode = (node?: Yoga.YogaNode): void => {
+const cleanupYogaNode = (node?: YogaNode): void => {
+	// @ts-expect-error Types wrong here
 	node?.unsetMeasureFunc();
 	node?.freeRecursive();
 };

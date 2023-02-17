@@ -46,6 +46,27 @@ export type Props = Except<Styles, 'textWrap'> & {
 	 * @default 0
 	 */
 	readonly paddingY?: number;
+
+	/**
+	 * Gap.
+	 *
+	 * @default 0
+	 */
+	readonly gap?: number;
+
+	/**
+	 * Column gap.
+	 *
+	 * @default 0
+	 */
+	readonly gapX?: number;
+
+	/**
+	 * Row gap.
+	 *
+	 * @default 0
+	 */
+	readonly gapY?: number;
 };
 
 /**
@@ -62,7 +83,11 @@ const Box = forwardRef<DOMElement, PropsWithChildren<Props>>(
 			paddingLeft: style.paddingLeft || style.paddingX || style.padding || 0,
 			paddingRight: style.paddingRight || style.paddingX || style.padding || 0,
 			paddingTop: style.paddingTop || style.paddingY || style.padding || 0,
-			paddingBottom: style.paddingBottom || style.paddingY || style.padding || 0
+			paddingBottom:
+				style.paddingBottom || style.paddingY || style.padding || 0,
+			gap: style.gap,
+			columnGap: style.gapX,
+			rowGap: style.gapY
 		};
 
 		return (

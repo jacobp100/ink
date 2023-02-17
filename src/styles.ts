@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-import Yoga, {YogaNode} from 'yoga-layout-prebuilt';
 import {Boxes} from 'cli-boxes';
 import {LiteralUnion} from 'type-fest';
 import {ForegroundColor} from 'chalk';
+import Yoga, {Node as YogaNode} from './yoga';
 
 export interface Styles {
 	readonly textWrap?:
@@ -87,6 +87,21 @@ export interface Styles {
 	readonly flexWrap?: 'nowrap' | 'wrap' | 'wrap-reverse';
 
 	/**
+	 * https://developer.mozilla.org/en-US/docs/Web/CSS/gap
+	 */
+	readonly gap?: number;
+
+	/**
+	 * https://developer.mozilla.org/en-US/docs/Web/CSS/gap
+	 */
+	readonly columnGap?: number;
+
+	/**
+	 * https://developer.mozilla.org/en-US/docs/Web/CSS/gap
+	 */
+	readonly rowGap?: number;
+
+	/**
 	 * The align-items property defines the default behavior for how items are laid out along the cross axis (perpendicular to the main axis).
 	 * See [align-items](https://css-tricks.com/almanac/properties/a/align-items/).
 	 */
@@ -149,7 +164,7 @@ export interface Styles {
 	readonly borderColor?: LiteralUnion<typeof ForegroundColor, string>;
 }
 
-const applyPositionStyles = (node: Yoga.YogaNode, style: Styles): void => {
+const applyPositionStyles = (node: YogaNode, style: Styles): void => {
 	if ('position' in style) {
 		node.setPositionType(
 			style.position === 'absolute'
@@ -159,7 +174,7 @@ const applyPositionStyles = (node: Yoga.YogaNode, style: Styles): void => {
 	}
 };
 
-const applyMarginStyles = (node: Yoga.YogaNode, style: Styles): void => {
+const applyMarginStyles = (node: YogaNode, style: Styles): void => {
 	if ('marginLeft' in style) {
 		node.setMargin(Yoga.EDGE_START, style.marginLeft || 0);
 	}
@@ -177,7 +192,7 @@ const applyMarginStyles = (node: Yoga.YogaNode, style: Styles): void => {
 	}
 };
 
-const applyPaddingStyles = (node: Yoga.YogaNode, style: Styles): void => {
+const applyPaddingStyles = (node: YogaNode, style: Styles): void => {
 	if ('paddingLeft' in style) {
 		node.setPadding(Yoga.EDGE_LEFT, style.paddingLeft || 0);
 	}
@@ -218,6 +233,18 @@ const applyFlexStyles = (node: YogaNode, style: Styles): void => {
 		if (style.flexWrap === 'wrap-reverse') {
 			node.setFlexWrap(Yoga.WRAP_WRAP_REVERSE);
 		}
+	}
+
+	if (style.gap != null) {
+		node.setGap(Yoga.GUTTER_ALL, style.gap);
+	}
+
+	if (style.columnGap != null) {
+		node.setGap(Yoga.GUTTER_COLUMN, style.columnGap);
+	}
+
+	if (style.rowGap != null) {
+		node.setGap(Yoga.GUTTER_ROW, style.rowGap);
 	}
 
 	if ('flexDirection' in style) {
