@@ -50,12 +50,12 @@ test('exit with thrown error', async t => {
 test.cb('don’t exit while raw mode is active', t => {
 	const term = spawn(
 		'../node_modules/.bin/ts-node',
-		['./fixtures/exit-double-raw-mode.tsx'],
+		['--transpileOnly', './fixtures/exit-double-raw-mode.tsx'],
 		{
 			name: 'xterm-color',
 			cols: 100,
 			cwd: __dirname,
-			env: process.env
+			env: process.env as any
 		}
 	);
 

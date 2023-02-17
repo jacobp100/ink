@@ -137,13 +137,14 @@ test('number', t => {
 });
 
 test('fail when text nodes are not within <Text> component', t => {
-	let error;
+	let error: any;
 
 	class ErrorBoundary extends Component {
 		render() {
-			return this.props.children;
+			return <>{this.props.children}</>;
 		}
 
+		// @ts-expect-error
 		componentDidCatch(reactError) {
 			error = reactError;
 		}
@@ -166,14 +167,14 @@ test('fail when text nodes are not within <Text> component', t => {
 });
 
 test('fail when text node is not within <Text> component', t => {
-	let error;
+	let error: any;
 
 	class ErrorBoundary extends Component {
 		render() {
-			return this.props.children;
+			return <>{this.props.children}</>;
 		}
 
-		componentDidCatch(reactError) {
+		componentDidCatch(reactError: any) {
 			error = reactError;
 		}
 	}
@@ -192,14 +193,14 @@ test('fail when text node is not within <Text> component', t => {
 });
 
 test('fail when <Box> is inside <Text> component', t => {
-	let error;
+	let error: any;
 
 	class ErrorBoundary extends Component {
 		render() {
-			return this.props.children;
+			return <>{this.props.children}</>;
 		}
 
-		componentDidCatch(reactError) {
+		componentDidCatch(reactError: any) {
 			error = reactError;
 		}
 	}
@@ -306,11 +307,13 @@ test('squash empty `<Text>` nodes', t => {
 });
 
 test('<Transform> with undefined children', t => {
+	// @ts-expect-error
 	const output = renderToString(<Transform />);
 	t.is(output, '');
 });
 
 test('<Transform> with null children', t => {
+	// @ts-expect-error
 	const output = renderToString(<Transform />);
 	t.is(output, '');
 });
@@ -392,10 +395,12 @@ test('ensure wrap-ansi doesn’t trim leading whitespace', t => {
 test('replace child node with text', t => {
 	const stdout = createStdout();
 
+	// @ts-expect-error
 	const Dynamic = ({replace}) => (
 		<Text>{replace ? 'x' : <Text color="green">test</Text>}</Text>
 	);
 
+	// @ts-expect-error
 	const {rerender} = render(<Dynamic />, {
 		stdout,
 		debug: true
@@ -411,7 +416,7 @@ test('replace child node with text', t => {
 test('disable raw mode when all input components are unmounted', t => {
 	const stdout = createStdout();
 
-	const stdin = new EventEmitter();
+	const stdin: any = new EventEmitter();
 	stdin.setEncoding = () => {};
 	stdin.setRawMode = spy();
 	stdin.isTTY = true; // Without this, setRawMode will throw
@@ -424,7 +429,9 @@ test('disable raw mode when all input components are unmounted', t => {
 		debug: true
 	};
 
-	class Input extends React.Component {
+	class Input extends Component<{
+		setRawMode: (rawMode: boolean) => void;
+	}> {
 		render() {
 			return <Text>Test</Text>;
 		}
@@ -438,6 +445,7 @@ test('disable raw mode when all input components are unmounted', t => {
 		}
 	}
 
+	// @ts-expect-error
 	const Test = ({renderFirstInput, renderSecondInput}) => {
 		const {setRawMode} = useStdin();
 
@@ -459,12 +467,14 @@ test('disable raw mode when all input components are unmounted', t => {
 	t.true(stdin.resume.calledOnce);
 	t.false(stdin.pause.called);
 
+	// @ts-expect-error
 	rerender(<Test renderFirstInput />);
 
 	t.true(stdin.setRawMode.calledOnce);
 	t.true(stdin.resume.calledOnce);
 	t.false(stdin.pause.called);
 
+	// @ts-expect-error
 	rerender(<Test />);
 
 	t.true(stdin.setRawMode.calledTwice);
@@ -476,7 +486,7 @@ test('disable raw mode when all input components are unmounted', t => {
 test('setRawMode() should throw if raw mode is not supported', t => {
 	const stdout = createStdout();
 
-	const stdin = new EventEmitter();
+	const stdin: any = new EventEmitter();
 	stdin.setEncoding = () => {};
 	stdin.setRawMode = spy();
 	stdin.isTTY = false;
@@ -492,7 +502,9 @@ test('setRawMode() should throw if raw mode is not supported', t => {
 		debug: true
 	};
 
-	class Input extends React.Component {
+	class Input extends Component<{
+		setRawMode: (rawMode: boolean) => void;
+	}> {
 		render() {
 			return <Text>Test</Text>;
 		}
@@ -532,7 +544,7 @@ test('setRawMode() should throw if raw mode is not supported', t => {
 test('render different component based on whether stdin is a TTY or not', t => {
 	const stdout = createStdout();
 
-	const stdin = new EventEmitter();
+	const stdin: any = new EventEmitter();
 	stdin.setEncoding = () => {};
 	stdin.setRawMode = spy();
 	stdin.isTTY = false;
@@ -545,7 +557,9 @@ test('render different component based on whether stdin is a TTY or not', t => {
 		debug: true
 	};
 
-	class Input extends React.Component {
+	class Input extends Component<{
+		setRawMode: (rawMode: boolean) => void;
+	}> {
 		render() {
 			return <Text>Test</Text>;
 		}
@@ -559,6 +573,7 @@ test('render different component based on whether stdin is a TTY or not', t => {
 		}
 	}
 
+	// @ts-expect-error
 	const Test = ({renderFirstInput, renderSecondInput}) => {
 		const {isRawModeSupported, setRawMode} = useStdin();
 
@@ -583,12 +598,14 @@ test('render different component based on whether stdin is a TTY or not', t => {
 	t.false(stdin.resume.called);
 	t.false(stdin.pause.called);
 
+	// @ts-expect-error
 	rerender(<Test renderFirstInput />);
 
 	t.false(stdin.setRawMode.called);
 	t.false(stdin.resume.called);
 	t.false(stdin.pause.called);
 
+	// @ts-expect-error
 	rerender(<Test />);
 
 	t.false(stdin.setRawMode.called);
@@ -623,6 +640,7 @@ test('render all frames if CI environment variable equals false', async t => {
 test('reset prop when it’s removed from the element', t => {
 	const stdout = createStdout();
 
+	// @ts-expect-error
 	const Dynamic = ({remove}) => (
 		<Box
 			flexDirection="column"
@@ -633,6 +651,7 @@ test('reset prop when it’s removed from the element', t => {
 		</Box>
 	);
 
+	// @ts-expect-error
 	const {rerender} = render(<Dynamic />, {
 		stdout,
 		debug: true

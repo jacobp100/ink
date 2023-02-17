@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, Static, Text} from '../..';
+import {render, Static, Text} from '../../src';
 
 interface TestState {
 	counter: number;
@@ -44,7 +44,7 @@ class Test extends React.Component<Record<string, unknown>, TestState> {
 	}
 
 	componentWillUnmount() {
-		clearTimeout(this.timer);
+		clearTimeout(this.timer!);
 	}
 }
 

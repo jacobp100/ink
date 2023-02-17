@@ -10,6 +10,7 @@ import {render, Box, Text} from '../src';
 const box = (text: string, options?: Options): string => {
 	return boxen(text, {
 		...options,
+		// @ts-expect-error
 		borderStyle: 'round'
 	});
 };
@@ -250,10 +251,10 @@ test('nested boxes', t => {
 });
 
 test('render border after update', async t => {
-	const stdout = createStdout();
+	const stdout: any = createStdout();
 
 	const Test = () => {
-		const [borderColor, setBorderColor] = useState();
+		const [borderColor, setBorderColor] = useState<string>();
 
 		useEffect(() => {
 			setBorderColor('green');

@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect, FC} from 'react';
 import test from 'ava';
 import delay from 'delay';
-import {Box, Text, render, measureElement} from '..';
+import {Box, Text, render, measureElement} from '../src';
 import createStdout from './helpers/create-stdout';
 
 test('measure element', async t => {
@@ -9,7 +9,7 @@ test('measure element', async t => {
 
 	const Test: FC = () => {
 		const [width, setWidth] = useState(0);
-		const ref = useRef();
+		const ref = useRef<any>();
 
 		useEffect(() => {
 			setWidth(measureElement(ref.current).width);

@@ -6,13 +6,16 @@ import stripAnsi from 'strip-ansi';
 import {render} from '../src';
 import createStdout from './helpers/create-stdout';
 
+// @ts-expect-error
 let restore;
 
 test.before(() => {
+	// @ts-expect-error
 	restore = patchConsole();
 });
 
 test.after(() => {
+	// @ts-expect-error
 	restore();
 });
 
@@ -31,17 +34,17 @@ test('catch and display error', t => {
 			'',
 			'  ERROR  Oh no',
 			'',
-			' test/errors.tsx:23:9',
+			' test/errors.tsx:26:9',
 			'',
-			' 20:   const stdout = createStdout();',
-			' 21:',
-			' 22:   const Test = () => {',
-			" 23:     throw new Error('Oh no');",
-			' 24:   };',
-			' 25:',
-			' 26:   render(<Test />, {stdout});',
+			' 23:   const stdout = createStdout();',
+			' 24:',
+			' 25:   const Test = () => {',
+			" 26:     throw new Error('Oh no');",
+			' 27:   };',
+			' 28:',
+			' 29:   render(<Test />, {stdout});',
 			'',
-			' - Test (test/errors.tsx:23:9)'
+			' - Test (test/errors.tsx:26:9)'
 		]
 	);
 });

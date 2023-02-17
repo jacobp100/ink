@@ -5,11 +5,13 @@ import {Box, Text, render} from '../src';
 import createStdout from './helpers/create-stdout';
 
 test('update child', t => {
+	// @ts-expect-error
 	const Test = ({update}) => <Text>{update ? 'B' : 'A'}</Text>;
 
 	const stdoutActual = createStdout();
 	const stdoutExpected = createStdout();
 
+	// @ts-expect-error
 	const actual = render(<Test />, {
 		stdout: stdoutActual,
 		debug: true
@@ -35,6 +37,7 @@ test('update child', t => {
 });
 
 test('update text node', t => {
+	// @ts-expect-error
 	const Test = ({update}) => (
 		<Box>
 			<Text>Hello </Text>
@@ -45,6 +48,7 @@ test('update text node', t => {
 	const stdoutActual = createStdout();
 	const stdoutExpected = createStdout();
 
+	// @ts-expect-error
 	const actual = render(<Test />, {
 		stdout: stdoutActual,
 		debug: true
@@ -70,6 +74,7 @@ test('update text node', t => {
 });
 
 test('append child', t => {
+	// @ts-expect-error
 	const Test = ({append}) => {
 		if (append) {
 			return (
@@ -90,6 +95,7 @@ test('append child', t => {
 	const stdoutActual = createStdout();
 	const stdoutExpected = createStdout();
 
+	// @ts-expect-error
 	const actual = render(<Test />, {
 		stdout: stdoutActual,
 		debug: true
@@ -126,6 +132,7 @@ test('append child', t => {
 });
 
 test('insert child between other children', t => {
+	// @ts-expect-error
 	const Test = ({insert}) => {
 		if (insert) {
 			return (
@@ -148,6 +155,7 @@ test('insert child between other children', t => {
 	const stdoutActual = createStdout();
 	const stdoutExpected = createStdout();
 
+	// @ts-expect-error
 	const actual = render(<Test />, {
 		stdout: stdoutActual,
 		debug: true
@@ -186,6 +194,7 @@ test('insert child between other children', t => {
 });
 
 test('remove child', t => {
+	// @ts-expect-error
 	const Test = ({remove}) => {
 		if (remove) {
 			return (
@@ -206,6 +215,7 @@ test('remove child', t => {
 	const stdoutActual = createStdout();
 	const stdoutExpected = createStdout();
 
+	// @ts-expect-error
 	const actual = render(<Test />, {
 		stdout: stdoutActual,
 		debug: true
@@ -242,6 +252,7 @@ test('remove child', t => {
 });
 
 test('reorder children', t => {
+	// @ts-expect-error
 	const Test = ({reorder}) => {
 		if (reorder) {
 			return (
@@ -263,6 +274,7 @@ test('reorder children', t => {
 	const stdoutActual = createStdout();
 	const stdoutExpected = createStdout();
 
+	// @ts-expect-error
 	const actual = render(<Test />, {
 		stdout: stdoutActual,
 		debug: true
@@ -302,10 +314,12 @@ test('reorder children', t => {
 test('replace child node with text', t => {
 	const stdout = createStdout();
 
+	// @ts-expect-error
 	const Dynamic = ({replace}) => (
 		<Text>{replace ? 'x' : <Text color="green">test</Text>}</Text>
 	);
 
+	// @ts-expect-error
 	const {rerender} = render(<Dynamic />, {
 		stdout,
 		debug: true
@@ -320,9 +334,9 @@ test('replace child node with text', t => {
 test('support suspense', async t => {
 	const stdout = createStdout();
 
-	let promise;
-	let state;
-	let value;
+	let promise: Promise<void> | undefined;
+	let state: 'pending' | 'done';
+	let value: string | undefined;
 
 	const read = () => {
 		if (!promise) {
@@ -343,9 +357,7 @@ test('support suspense', async t => {
 			throw promise;
 		}
 
-		if (state === 'done') {
-			return value;
-		}
+		return value;
 	};
 
 	const Suspendable = () => <Text>{read()}</Text>;

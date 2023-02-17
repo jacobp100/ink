@@ -126,6 +126,7 @@ test('text with inversion', t => {
 });
 
 test('remeasure text when text is changed', t => {
+	// @ts-expect-error
 	const Test = ({add}) => (
 		<Box>
 			<Text>{add ? 'abcx' : 'abc'}</Text>
@@ -133,6 +134,7 @@ test('remeasure text when text is changed', t => {
 	);
 
 	const stdout = createStdout();
+	// @ts-expect-error
 	const {rerender} = render(<Test />, {stdout, debug: true});
 	t.is(stdout.write.lastCall.args[0], 'abc');
 
@@ -141,6 +143,7 @@ test('remeasure text when text is changed', t => {
 });
 
 test('remeasure text when text nodes are changed', t => {
+	// @ts-expect-error
 	const Test = ({add}) => (
 		<Box>
 			<Text>
@@ -151,6 +154,7 @@ test('remeasure text when text nodes are changed', t => {
 	);
 
 	const stdout = createStdout();
+	// @ts-expect-error
 	const {rerender} = render(<Test />, {stdout, debug: true});
 	t.is(stdout.write.lastCall.args[0], 'abc');
 

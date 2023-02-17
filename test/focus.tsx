@@ -3,11 +3,11 @@ import React, {useEffect, FC} from 'react';
 import delay from 'delay';
 import test from 'ava';
 import {spy} from 'sinon';
-import {render, Box, Text, useFocus, useFocusManager} from '..';
+import {render, Box, Text, useFocus, useFocusManager} from '../src';
 import createStdout from './helpers/create-stdout';
 
 const createStdin = () => {
-	const stdin = new EventEmitter();
+	const stdin: any = new EventEmitter();
 	stdin.isTTY = true;
 	stdin.setRawMode = spy();
 	stdin.setEncoding = () => {};

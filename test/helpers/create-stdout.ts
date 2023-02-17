@@ -5,12 +5,16 @@ import {spy} from 'sinon';
 interface Stream extends EventEmitter {
 	output: string;
 	columns: number;
-	write(str: string): void;
+	write: ((str: string) => void) & {
+		lastCall: {
+			args: string[];
+		};
+	};
 	get(): string;
 }
 
-export default (columns?: number): Stream => {
-	const stdout = new EventEmitter();
+export default (columns?: number): any /* TODO: Fix type */ => {
+	const stdout = new EventEmitter() as Stream;
 	stdout.columns = columns ?? 100;
 	stdout.write = spy();
 	stdout.get = () => stdout.write.lastCall.args[0];

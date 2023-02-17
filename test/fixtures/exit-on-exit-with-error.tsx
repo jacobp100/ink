@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, Text, useApp} from '../..';
+import {render, Text, useApp} from '../../src';
 
 class Exit extends React.Component<
 	{onExit: (error: Error) => void},
@@ -26,7 +26,7 @@ class Exit extends React.Component<
 	}
 
 	componentWillUnmount() {
-		clearInterval(this.timer);
+		clearInterval(this.timer!);
 	}
 }
 

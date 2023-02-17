@@ -12,15 +12,19 @@ const term = (fixture: string, args: string[] = []) => {
 		reject = reject2;
 	});
 
-	const env = {...process.env};
+	const env = {...process.env} as any;
 	delete env.CI;
 
-	const ps = spawn('ts-node', [`./fixtures/${fixture}.tsx`, ...args], {
-		name: 'xterm-color',
-		cols: 100,
-		cwd: __dirname,
-		env
-	});
+	const ps = spawn(
+		'ts-node',
+		['--transpileOnly', `./fixtures/${fixture}.tsx`, ...args],
+		{
+			name: 'xterm-color',
+			cols: 100,
+			cwd: __dirname,
+			env
+		}
+	);
 
 	const result = {
 		write: (input: string) => {
@@ -173,6 +177,7 @@ test('useInput - ignore input if not active', async t => {
 
 // For some reason this test is flaky, so we have to resort to using `t.try` to run it multiple times
 test('useInput - handle Ctrl+C when `exitOnCtrlC` is `false`', async t => {
+	// @ts-expect-error
 	const run = async tt => {
 		const ps = term('use-input-ctrl-c');
 		ps.write('\u0003');

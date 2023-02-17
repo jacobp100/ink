@@ -19,15 +19,19 @@ const term = (fixture: string, args: string[] = []) => {
 		reject = reject2;
 	});
 
-	const ps = spawn('ts-node', [`./fixtures/${fixture}.tsx`, ...args], {
-		name: 'xterm-color',
-		cols: 100,
-		cwd: __dirname,
-		env: process.env
-	});
+	const ps = spawn(
+		'ts-node',
+		['--transpileOnly', `./fixtures/${fixture}.tsx`, ...args],
+		{
+			name: 'xterm-color',
+			cols: 100,
+			cwd: __dirname,
+			env: process.env as any
+		}
+	);
 
 	const result = {
-		write: input => ps.write(input),
+		write: (input: string) => ps.write(input),
 		output: '',
 		waitForExit: () => exitPromise
 	};
@@ -125,6 +129,7 @@ test('rerender on resize', async t => {
 
 	t.is(
 		stripAnsi(stdout.write.firstCall.args[0]),
+		// @ts-expect-error
 		boxen('Test'.padEnd(8), {borderStyle: 'round'}) + '\n'
 	);
 
@@ -136,6 +141,7 @@ test('rerender on resize', async t => {
 
 	t.is(
 		stripAnsi(stdout.write.lastCall.args[0]),
+		// @ts-expect-error
 		boxen('Test'.padEnd(6), {borderStyle: 'round'}) + '\n'
 	);
 
